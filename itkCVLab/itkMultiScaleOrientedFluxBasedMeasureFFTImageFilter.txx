@@ -91,14 +91,27 @@ namespace itk
 	::SetNumberOfSigmaSteps( unsigned int numOfSigmaSteps )
 	{
 		m_NumberOfSigmaSteps = numOfSigmaSteps;
-		
-		RealType sigmaStep = (m_SigmaMaximum - m_SigmaMinimum) / ( static_cast<RealType> (m_NumberOfSigmaSteps - 1) );
-		m_Sigmas.clear();
-		
-		for(unsigned int i = 0; i < m_NumberOfSigmaSteps; i++)
+		if( m_NumberOfSigmaSteps > 1 )
 		{
-			m_Sigmas.push_back(m_SigmaMinimum + (static_cast<RealType> (i))*sigmaStep);
+			RealType sigmaStep = (m_SigmaMaximum - m_SigmaMinimum) / ( static_cast<RealType> (m_NumberOfSigmaSteps - 1) );
+			m_Sigmas.clear();
+			
+			for(unsigned int i = 0; i < m_NumberOfSigmaSteps; i++)
+			{
+				m_Sigmas.push_back(m_SigmaMinimum + (static_cast<RealType> (i))*sigmaStep);
+			}
 		}
+		else if( m_NumberOfSigmaSteps == 1 )
+		{
+			m_Sigmas.clear();
+			m_Sigmas.push_back(m_SigmaMinimum);
+		}
+		else
+		{
+			itkExceptionMacro(<<"number of scales must be positive"); 
+		}
+
+		
 	}
 	
 	/**
