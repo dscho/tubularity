@@ -99,7 +99,8 @@ public class LibraryLoader {
 			libraryDirectory = getLibraryDirectory();
 
 		File file = new File(libraryDirectory, fileName);
-		if (!file.exists()) {
+		if (!file.exists()) 
+		{
 			// Try to write to the 
 			if (baseURL == null)
 				throw new RuntimeException("Could not determine .jar");
@@ -117,7 +118,6 @@ public class LibraryLoader {
 				throw new RuntimeException("Could not extract " + fileName + ": " + e);
 			}
 		}
-
 		System.load(file.getAbsolutePath());
 	}
 
