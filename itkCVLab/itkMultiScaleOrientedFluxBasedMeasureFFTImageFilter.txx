@@ -449,7 +449,7 @@ namespace itk
 #pragma omp critical
 			{
 				std::cout << "at scale :" << m_Sigmas[i] << std::endl;
-				std::cout << "elapsed time for computing the Oriented Flux matrix: " << time.GetMeanTime() << " seconds" <<  std::endl;
+				std::cout << "elapsed time for computing the Oriented Flux matrix: " << time.GetMean() << " seconds" <<  std::endl;
 			}
 			
 			typename OrientedFluxToMeasureFilterType::Pointer orientedFluxToMeasureFilter = OrientedFluxToMeasureFilterType::New();

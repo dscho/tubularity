@@ -29,8 +29,6 @@
 #include <itkImageBoundaryCondition.h>
 #include <itkZeroFluxNeumannBoundaryCondition.h>
 
-
-
 namespace itk
 {
 	

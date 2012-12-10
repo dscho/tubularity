@@ -412,7 +412,7 @@ namespace itk
 		InputSizeType inputSize = inputImage->GetLargestPossibleRegion().GetSize();
 		//RealType radius   = this->GetRadius();
 		double minSpacing = inputImage->GetSpacing().GetVnlVector().min_value();
-		unsigned int halfWindowSize = round(m_Radius/minSpacing) + 1;
+		unsigned int halfWindowSize = Math::Round(m_Radius/minSpacing) + 1;
 		InputSizeType kernelSize;
 		kernelSize.Fill( 2*halfWindowSize + 1 );
 		InputSizeType padSize;

@@ -12,7 +12,10 @@
 #include <itkFastMutexLock.h>
 #include "vnl/vnl_math.h"
 #include <jni.h>
-#include <unistd.h>
+
+#ifndef _WIN32
+	#include <unistd.h>
+#endif
 
 using std::cout;
 using std::endl;
@@ -271,8 +274,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
 
     JNIEnv * env;
     UserData * userData = NULL;
-
-    // From: http://www.adamish.com/blog/archives/327
+	// From: http://www.adamish.com/blog/archives/327
 
     int getEnvStat = globalJVM->GetEnv((void **)&env, JNI_VERSION_1_6);
     if (getEnvStat == JNI_EDETACHED) {
@@ -284,24 +286,21 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
     } else if (getEnvStat == JNI_EVERSION) {
         cout << "Failed to attach to JVM with GetEnv: version not supported" << endl;
     }
-
-    itk::MultiThreader::ThreadInfoStruct* threadInfo = static_cast<itk::MultiThreader::ThreadInfoStruct*>(param);
+	itk::MultiThreader::ThreadInfoStruct* threadInfo = static_cast<itk::MultiThreader::ThreadInfoStruct*>(param);
 
     if (!threadInfo)  {
         cout << "Failed to get the thread info" << endl;
         releaseJVM(userData);
         return ITK_THREAD_RETURN_VALUE;
     }
-
-    userData = static_cast<UserData*>(threadInfo->UserData);
+	userData = static_cast<UserData*>(threadInfo->UserData);
 
     // Generate global references for the two objects that were passed in:
 
     jclass pathResultClass = env->GetObjectClass(pathResultObject);
 
     // Check that the float arrays are of the right length:
-
-    int pt1Length = env->GetArrayLength(userData->jPoint1);
+	int pt1Length = env->GetArrayLength(userData->jPoint1);
     int pt2Length = env->GetArrayLength(userData->jPoint2);
 
     if (pt1Length != 3) {
@@ -314,8 +313,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
         releaseJVM(userData);
         return ITK_THREAD_RETURN_VALUE;
     }
-
-    if (pt2Length != 3) {
+	if (pt2Length != 3) {
         cout << "wrong length of pt2" << endl;
         setErrorMessage(env,
                         "pt2 was not of length 3",
@@ -326,8 +324,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
     }
 
     // And convert them to C types:
-
-    jboolean isPoint1Copy, isPoint2Copy;
+	jboolean isPoint1Copy, isPoint2Copy;
     jfloat * pt1 = env->GetFloatArrayElements(userData->jPoint1, &isPoint1Copy);
     jfloat * pt2 = env->GetFloatArrayElements(userData->jPoint2, &isPoint2Copy);
 
@@ -357,8 +354,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
 
     // Now we can safely allow the function that spawned this thread
     // to return:
-
-    userData->semaphoreUserDataCopied->Up();
+	userData->semaphoreUserDataCopied->Up();
 
     // ------------------------------------------------------------------------
 
@@ -367,6 +363,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
      * First, check if the tubularity score image is loaded.
      * If not, load it
      */
+	std::cout << filename << std::endl;
     if( !isTubularityScoreLoaded )
       {
 	ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -387,7 +384,7 @@ ITK_THREAD_RETURN_TYPE ThreadedFunction(void* param) {
           releaseJVM(userData);
           return ITK_THREAD_RETURN_VALUE;
 	  }
-
+	
 	tubularityScore = reader->GetOutput();
 	tubularityScore->DisconnectPipeline();
 	isTubularityScoreLoaded = true;
