@@ -1,0 +1,7 @@
+ jar-3.exe cvf plugins/TubularGeodesics_Plugin.jar \
+ FijiITKInterface/TubularGeodesics.class \
+ FijiITKInterface/TubularGeodesics_Plugin.class \
+ plugin.config \
+ fiji/jni/LibraryLoader.class \
+ -C build \
+ win64/TubularGeodesics.dll
